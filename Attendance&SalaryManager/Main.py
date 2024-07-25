@@ -123,7 +123,7 @@ def add_attendance(directory, salary_file_path, employee_name, attendance_entry)
 def handle_button_click():
     employee_name = employee_name_combobox.get()
     attendance_entry_text = attendance_entry.get()
-    directory = r"C:\Users\hello\Documents\Attandence"
+    directory = r"Attandence"
     salary_file_path = os.path.join(directory, "Salary.csv")
     add_attendance(directory, salary_file_path, employee_name, attendance_entry)
     root.after(2000, clear_status)
@@ -132,14 +132,13 @@ def clear_status():
     status_label.config(text="")
 
 def open_file_explorer():
-    directory_path = r"C:\Users\hello\Documents\Attandence"
+    directory_path = r"Attandence"
     if os.path.isdir(directory_path):
         os.startfile(directory_path)
     else:
         messagebox.showerror("Error", "Directory does not exist.")
 
 def calculate_ote(salary, month):
-    """Calculate OTE as (sal/8.5)/days."""
     year = datetime.now().year
     month_number = datetime.strptime(month, "%b").month
     days_in_month = calendar.monthrange(year, month_number)[1]
