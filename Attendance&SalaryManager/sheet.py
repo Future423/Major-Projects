@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import pandas as pd
 import os
-from datetime import datetime, timedelta # type: ignore
-import calendar # type: ignore
+from datetime import datetime, timedelta 
+import calendar 
 
 def calculate_hours_worked(start_time, end_time):
     start_dt = datetime.strptime(start_time, '%H:%M')
@@ -47,7 +47,6 @@ def create_csv_file():
         data = pd.read_csv(input_file_path)
         salary_data = pd.read_csv("C:\\Users\\hello\\Documents\\Attandence\\Salary.csv")
 
-        # Prepare the output data
         employees = data.columns[1:]
         dates = data.iloc[:, 0]
         
@@ -65,10 +64,9 @@ def create_csv_file():
             "Total Amount": []
         }
 
-        # Get the number of days in the selected month
         month_str = selected_file.split('.')[0]
         month_number = datetime.strptime(month_str, "%b").month
-        year = datetime.now().year  # Assuming current year
+        year = datetime.now().year  
         month_days = calendar.monthrange(year, month_number)[1]
 
         for employee in employees:
@@ -91,7 +89,7 @@ def create_csv_file():
                             overtime_total += calculate_overtime(hours_worked, date)
                         else:
                             a_count += 1
-                            overtime_total += calculate_overtime(hours_worked, date)  # Count overtime for <= 6 hours
+                            overtime_total += calculate_overtime(hours_worked, date)  
                 elif entry == "R":
                     r_count += 1
                 elif entry == "H":
@@ -128,7 +126,6 @@ def get_files():
     files = [f for f in os.listdir("C:\\Users\\hello\\Documents\\Attandence") if f.endswith(".csv") and f != "Salary.csv"]
     return files
 
-# Create the main window
 root = tk.Tk()
 root.title("Salary Sheet")
 root.geometry("260x130")
@@ -136,17 +133,14 @@ root.resizable(False, False)
 root.attributes('-fullscreen', False)
 root.config(bg="#ddffee")
 
-# Create and place the combobox
 tk.Label(root, text="Select File:", bg="#ddffee").grid(row=0, column=0, padx=10, pady=10)
 file_combobox = ttk.Combobox(root, values=get_files())
 file_combobox.grid(row=0, column=1, padx=10, pady=10)
 
-# Create and place the entry field for file name
 tk.Label(root, text="File Name:", bg="#ddffee").grid(row=1, column=0, padx=10, pady=10)
 file_name_entry = tk.Entry(root)
 file_name_entry.grid(row=1, column=1, padx=10, pady=10)
 
-# Create and place the create button with custom color
 create_button = tk.Button(root, text="Create", command=create_csv_file, padx=6, bg="#b9ffdc")#, fg="white")
 create_button.grid(row=2, columnspan=2, pady=10)
 
