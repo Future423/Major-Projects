@@ -1,17 +1,17 @@
-from datetime import datetime, timedelta # type: ignore
+from datetime import datetime, timedelta
 import tkinter as tk
 from tkinter import Toplevel, ttk
 from tkinter import messagebox
 import os
 import pandas as pd
-import calendar # type: ignore
-import subprocess # type: ignore
+import calendar
+import subprocess
 
 def fetch_employee_names(file_path):
     try:
         if os.path.exists(file_path):
             data = pd.read_csv(file_path)
-            names = data.iloc[:, 0].tolist()[1:]  # Skip the first column 'Date/Name'
+            names = data.iloc[:, 0].tolist()[1:] 
             return names
         else:
             return []
@@ -20,16 +20,16 @@ def fetch_employee_names(file_path):
         return []
 
 def update_employee_name_combobox():
-    file_path = r"C:\Users\hello\Documents\Attandence\Salary.csv"
+    file_path = "Salary.csv"
     employee_names = fetch_employee_names(file_path)
     if employee_names:
         employee_name_combobox['values'] = employee_names
-        employee_name_combobox.set('')  # Clear the selection
+        employee_name_combobox.set('')  
     else:
         employee_name_combobox['values'] = []
 
 def fetch_month_files():
-    directory_path = r"C:\Users\hello\Documents\Attandence"
+    directory_path = "Attandence" #replace it with your path
     try:
         files = os.listdir(directory_path)
         month_files = [file for file in files if file.endswith('.csv') and file != 'Salary.csv']
@@ -42,13 +42,12 @@ def fetch_month_files():
 def update_month_combobox():
     months = fetch_month_files()
     month_combobox['values'] = months
-    month_combobox.set('')  # Clear the selection
-
+    month_combobox.set('') 
 def fetch_names_from_month_file(file_path):
     try:
         if os.path.exists(file_path):
             data = pd.read_csv(file_path)
-            names = data.columns.tolist()[1:]  # Skip the first column 'Date/Name'
+            names = data.columns.tolist()[1:]  
             return names
         else:
             return []
@@ -59,11 +58,11 @@ def fetch_names_from_month_file(file_path):
 def update_employee_combobox_for_month():
     selected_month = month_combobox.get()
     if selected_month:
-        file_path = f"C:\\Users\\hello\\Documents\\Attandence\\{selected_month}.csv"
+        file_path = f"Attandence\\{selected_month}.csv"
         employee_names = fetch_names_from_month_file(file_path)
         if employee_names:
             employee_combobox['values'] = employee_names
-            employee_combobox.set('')  # Clear the selection
+            employee_combobox.set('')  
         else:
             employee_combobox['values'] = []
 
@@ -72,51 +71,42 @@ def on_month_selection(event):
 
 def add_attendance(directory, salary_file_path, employee_name, attendance_entry):
     """Add attendance data for the previous day."""
-    # Get the employee names
     employee_names = fetch_employee_names(salary_file_path)
     
     if not employee_names:
         status_label.config(text="No employees found.")
         return
     
-    # Check if selected employee is in the list
     if employee_name not in employee_names:
         status_label.config(text="Selected employee not found.")
         return
     
-    # Get today's date and calculate yesterday's date
     today = datetime.now()
     yesterday = today - timedelta(days=1)
-    month_name = yesterday.strftime('%b')  # Month name in short form (e.g., Jul)
-    yesterday_date = yesterday.strftime('%d')  # Day of the month (e.g., 21)
+    month_name = yesterday.strftime('%b')  
+    yesterday_date = yesterday.strftime('%d')  
     
-    # Check if yesterday was Sunday
-    if yesterday.weekday() == 6:  # Sunday is 6
+    if yesterday.weekday() == 6: 
         yesterday_date = f"(R){yesterday_date}"
     
-    # Create or update the month's CSV file
     file_name = f"{month_name}.csv"
     file_path = os.path.join(directory, file_name)
     
     if os.path.exists(file_path):
         data = pd.read_csv(file_path, index_col=0)
     else:
-        # Create a new file with headers
         data = pd.DataFrame(columns=['Date/Name'] + employee_names)
         data.set_index('Date/Name', inplace=True)
         data.to_csv(file_path)
     
-    # Ensure the employee column exists
     if employee_name not in data.columns:
         data[employee_name] = [''] * len(data)
     
-    # Update or add the row for yesterday's date
     attendance = attendance_entry.get().strip()
     if attendance:
         if yesterday_date in data.index:
             data.at[yesterday_date, employee_name] = attendance
         else:
-            # Add a new row with empty values if it does not exist
             new_row = pd.Series([''] * len(data.columns), index=data.columns)
             data.loc[yesterday_date] = new_row
             data.at[yesterday_date, employee_name] = attendance
@@ -124,7 +114,6 @@ def add_attendance(directory, salary_file_path, employee_name, attendance_entry)
         data.to_csv(file_path)
         status_label.config(text=f"Attendance for {employee_name} on {yesterday_date} has been added.")
         
-        # Clear the combobox and text entry field
         employee_name_combobox.set('')
         attendance_entry.delete(0, tk.END)
     else:
@@ -151,12 +140,9 @@ def open_file_explorer():
 
 def calculate_ote(salary, month):
     """Calculate OTE as (sal/8.5)/days."""
-    # Get the number of days in the selected month
     year = datetime.now().year
     month_number = datetime.strptime(month, "%b").month
     days_in_month = calendar.monthrange(year, month_number)[1]
-    
-    # Calculate OTE
     return (salary / 8.5) / days_in_month
 
 def show_salary_info():
@@ -167,8 +153,8 @@ def show_salary_info():
         messagebox.showwarning("Warning", "Please select both employee and month.")
         return
     
-    file_path = f"C:\\Users\\hello\\Documents\\Attandence\\{selected_month}.csv"
-    salary_file_path = r"C:\Users\hello\Documents\Attandence\Salary.csv"
+    file_path = f"Attandence\\{selected_month}.csv"
+    salary_file_path = r"Attandence\Salary.csv"
     
     try:
         data = pd.read_csv(file_path)
@@ -178,7 +164,6 @@ def show_salary_info():
             messagebox.showwarning("Warning", f"No data found for {selected_employee}.")
             return
         
-        # Calculate OTE
         employee_salary_row = salary_data[salary_data['Name'] == selected_employee]
         if employee_salary_row.empty:
             messagebox.showwarning("Warning", f"Salary information for {selected_employee} not found.")
@@ -187,8 +172,7 @@ def show_salary_info():
         salary = employee_salary_row.iloc[0]['Salary']
         days_in_month = (datetime(datetime.now().year, datetime.strptime(selected_month, "%b").month + 1, 1) - timedelta(days=1)).day
         OTE = (salary / 8.5) / days_in_month
-        
-        # Calculate totals for the selected employee
+
         total_absent = 0
         total_halftime = 0
         total_overtime = 0
@@ -220,13 +204,11 @@ def show_salary_info():
             
         total_overtime = round(total_overtime, 2)
 
-        # Calculate salaries
         salary_total = OTE * 8.5 * total_attendance_records
         halftime_salary = OTE * 4.25 * total_halftime
         overtime_salary = OTE * total_overtime
         total_salary = salary_total + halftime_salary + overtime_salary
 
-        # Prepare output
         result = (
             f"Total Attendance Records: {total_attendance_records}\n"
             f"Total Halftime: {total_halftime}\n"
@@ -244,7 +226,6 @@ def show_salary_info():
         messagebox.showerror("Error", f"An unexpected error occurred while showing salary information: {e}")
 
 def calculate_hours_worked(arrival_time, departure_time):
-    """Calculate hours worked from arrival and departure times."""
     try:
         arrival = datetime.strptime(arrival_time, '%H:%M')
         departure = datetime.strptime(departure_time, '%H:%M')
@@ -257,16 +238,13 @@ def calculate_hours_worked(arrival_time, departure_time):
         return None
 
 def round_off_minutes(hours):
-    """Round off minutes to the nearest 30 minutes."""
     total_minutes = int(hours * 60)
     rounded_minutes = (total_minutes // 30) * 30
     rounded_hours = rounded_minutes / 60
     return rounded_hours
 
 def calculate_overtime(hours_worked, date):
-    """Calculate overtime based on hours worked and date format."""
     standard_hours = 8.5
-    # If the date format contains "(R)", consider the hours worked as overtime directly
     if "(R)" in date:
         hours_worked = round_off_minutes(hours_worked)
         return hours_worked
@@ -284,11 +262,10 @@ def calculate_overtime(hours_worked, date):
             return rounded_overtime_minutes
 
 def show_help():
-    """Display a help popup with contact information."""
     help_text = (
         "For assistance, please contact:\n\n"
-        "Phone: +91- 7404381687\n"
-        "Email: nishantsainisnp@gmail.com\n\n"
+        "Phone: +XY-ABCDEFGH\n"
+        "Email: yourgmail@gmail.com\n\n"
         "Thank you!"
     )
     messagebox.showinfo("Help", help_text)
@@ -301,7 +278,7 @@ def show_attendance_info():
         messagebox.showwarning("Warning", "Please select both employee and month.")
         return
     
-    file_path = f"C:\\Users\\hello\\Documents\\Attandence\\{selected_month}.csv"
+    file_path = f"Attandence\\{selected_month}.csv"
     
     try:
         data = pd.read_csv(file_path)
@@ -310,7 +287,6 @@ def show_attendance_info():
             messagebox.showwarning("Warning", f"No data found for {selected_employee}.")
             return
         
-        # Prepare the output with fixed-width formatting
         header_format = "{:<12} {:<15} {:<15} {:<10}"
         row_format = "{:<15} {:<25} {:<20} {:<0}"
         
@@ -339,7 +315,6 @@ def show_attendance_info():
                     hours_worked = calculate_hours_worked(start_time, end_time)
                     if hours_worked is not None:
                         hours_worked_formatted = f"{int(hours_worked)}:{int((hours_worked % 1) * 60):02}"
-                        # Pass the date to calculate_overtime
                         overtime = calculate_overtime(hours_worked, date)
                         if hours_worked > 6:
                             hours_worked_list.append(hours_worked)
@@ -360,7 +335,6 @@ def show_attendance_info():
             
             output_lines.append(row_format.format(date, attendance, hours_worked_formatted, f"{overtime:.2f}"))
         
-        # Calculate totals
         total_attendance_records += len(hours_worked_list)
         total_overtime = round(total_overtime, 2)
 
@@ -369,7 +343,6 @@ def show_attendance_info():
         output_lines.append(f"Total Overtime: {total_overtime:.2f}")
         output_lines.append(f"Total Absent: {total_absent}")
         
-        # Show the information in a pop-up
         result = "\n".join(output_lines)
         messagebox.showinfo("Attendance Information", result)
         
@@ -401,7 +374,7 @@ def open_add_employee_popup():
         name = name_entry.get()
         salary = salary_entry.get()
         if name and salary:
-            file_path = r"C:\Users\hello\Documents\Attandence\Salary.csv"
+            file_path = r"Attandence\Salary.csv"
             try:
                 if os.path.exists(file_path):
                     salary_data = pd.read_csv(file_path)
@@ -413,7 +386,6 @@ def open_add_employee_popup():
                 
                 salary_data.to_csv(file_path, index=False)
                 messagebox.showinfo("Add Employee", f"Employee {name} with salary {salary} added.")
-                # Update comboboxes with the current month
                 update_employee_name_combobox()
                 update_employee_combobox_for_month()
             except Exception as e:
@@ -437,21 +409,18 @@ def view_sheet():
         current_dir = os.getcwd()
         file_path = os.path.join(current_dir, sheet)
         result = subprocess.run(["python", file_path], capture_output=True, text=True)
-        #print(result.stdout)
         if result.stderr:
             print("Error:", result.stderr)
     except Exception as e:
         print(f"An error occurred: {e}")
     pass
 
-# Create the main window
 root = tk.Tk()
 root.title("TPS Attendance & Salary")
 root.geometry("410x380")
 root.resizable(False, False)
 root.attributes('-fullscreen', False)
 
-# Configure styles
 style = ttk.Style()
 style.configure("TFrame", background="#ddffee")
 style.configure("TLabel", background="#ddffee", font=("Helvetica", 11))
@@ -459,14 +428,12 @@ style.configure("TCombobox", background="#b9ffdc", font=("Helvetica", 11))
 style.configure("TLabelframe", background="#ddffee", font=("Helvetica", 10))
 style.configure("TLabelframe.Label", background="#ddffee", font=("Helvetica", 10))
 
-# Custom button style
 style.configure("Custom.TButton", background="#b9ffdc", foreground="#000000", font=("Helvetica", 11), 
                 relief="flat", padding=5)
 style.map("Custom.TButton",
           background=[('active', '#b9ffdc')],
           foreground=[('active', '#000000')])
 
-# Create a menu bar
 menu_bar = tk.Menu(root)
 root.config(menu=menu_bar)
 root.configure(bg="#ddffee")
@@ -476,18 +443,15 @@ menu_bar.add_command(label="View Sheet", command=view_sheet)
 menu_bar.add_command(label="Add Employee", command=open_add_employee_popup)
 menu_bar.add_command(label="Help", command=show_help)
 
-# Create the main frame
 main_frame = ttk.Frame(root)
 main_frame.pack(expand=True, fill="both", padx=20, pady=20)
 
-# Add a section for attendance and salary management
 attendance_frame = ttk.LabelFrame(main_frame, text="Attendance Management", padding=(10, 5), style="TLabelframe")
 attendance_frame.pack(fill="both", expand=True, pady=5)
 
 salary_frame = ttk.LabelFrame(main_frame, text="Salary Management", padding=(10, 5), style="TLabelframe")
 salary_frame.pack(fill="both", expand=True, pady=5)
 
-# Add widgets to the attendance frame
 ttk.Label(attendance_frame, text="Employee Name:", background="#ddffee").grid(row=0, column=0, padx=10, pady=5, sticky="w")
 employee_name_combobox = ttk.Combobox(attendance_frame, state="readonly", style="TCombobox")
 employee_name_combobox.grid(row=0, column=1, padx=10, pady=5)
@@ -502,7 +466,6 @@ add_attendance_button.grid(row=2, column=0, columnspan=2, pady=5)
 status_label = ttk.Label(attendance_frame, text="", background="#ddffee", font=("Helvetica", 11))
 status_label.grid(row=3, column=0, columnspan=2, pady=5)
 
-# Add widgets to the salary frame
 ttk.Label(salary_frame, text="Select Month:", background="#ddffee").grid(row=0, column=0, padx=10, pady=5, sticky="w")
 month_combobox = ttk.Combobox(salary_frame, state="readonly", style="TCombobox")
 month_combobox.grid(row=0, column=1, padx=10, pady=5)
@@ -518,10 +481,8 @@ salary_button.grid(row=2, column=0, pady=5, padx=5, sticky="e")
 attendance_button = ttk.Button(salary_frame, text="Attendance", command=show_attendance_info, style="Custom.TButton")
 attendance_button.grid(row=2, column=1, pady=5, padx=5, sticky="w")
 
-# Bind Enter key to button clicks
 bind_enter_key(add_attendance_button)
 
-# Initialize comboboxes
 update_month_combobox()
 update_employee_name_combobox()
 
