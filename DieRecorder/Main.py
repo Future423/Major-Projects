@@ -23,9 +23,8 @@ class SearchApp:
 
         self.new_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label="New", command=self.enable_new)
-        #self.menu_bar.add_cascade(label="Search", command=self.search_button_command)
         self.menu_bar.add_command(label="Delete", command=self.delete_record)
-
+        self.menu_bar.add_command(label="Help", command=self.show_help)
         self.upper_frame = tk.Frame(root, bg=self.bg_color)
         self.upper_frame.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
 
@@ -309,7 +308,15 @@ class SearchApp:
     def show_context_menu(self, event):
         if self.tree.selection():
             self.context_menu.post(event.x_root, event.y_root)
-
+    def show_help(self):
+        help_text = (
+            "For assistance, please contact:\n\n"
+            "Phone: +XY-ABCDEFGH\n"
+            "Email: yourgmail@gmail.com\n\n"
+            "Thank you!"
+        )
+        messagebox.showinfo("Help", help_text)
+    
     def generate_next_die_code(self):
         if self.df.empty:
             return "1"
