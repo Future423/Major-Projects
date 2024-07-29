@@ -5,7 +5,7 @@ from tkinter import messagebox
 import os
 import pandas as pd
 import calendar
-import subprocess
+from sheet import SalarySheetGenerator
 
 def fetch_employee_names(file_path):
     try:
@@ -403,16 +403,10 @@ def bind_enter_key(button, window=None):
     window.bind('<Return>', lambda event: button.invoke())
 
 def view_sheet():
-    sheet = 'sheet.py'
-    try:
-        current_dir = os.getcwd()
-        file_path = os.path.join(current_dir, sheet)
-        result = subprocess.run(["python", file_path], capture_output=True, text=True)
-        if result.stderr:
-            print("Error:", result.stderr)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    pass
+    if __name__ == "__main__":
+        root = tk.Tk()
+        app = SalarySheetGenerator(root)
+        root.mainloop()
 
 root = tk.Tk()
 root.title("TPS Attendance & Salary")
