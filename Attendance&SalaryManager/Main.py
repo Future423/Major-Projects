@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import tkinter as tk
-from tkinter import Toplevel, ttk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 import os
 import pandas as pd
 import calendar
@@ -11,7 +10,7 @@ def fetch_employee_names(file_path):
     try:
         if os.path.exists(file_path):
             data = pd.read_csv(file_path)
-            names = data.iloc[:, 0].tolist()[1:] 
+            names = data.iloc[:, 0].tolist()[0:] 
             return names
         else:
             return []
