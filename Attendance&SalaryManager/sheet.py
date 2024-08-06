@@ -52,7 +52,7 @@ class SalarySheetGenerator:
         standard_hours = 8.5
         overtime = hours_worked - standard_hours
         
-        if "(R)" in date:
+        if "(R)" in str(date):
             return hours_worked
 
         if hours_worked <= 6:
@@ -104,12 +104,18 @@ class SalarySheetGenerator:
             month_days = calendar.monthrange(year, month_number)[1]
 
             for employee in employees:
+                salary_row = salary_data.loc[salary_data['Name'] == employee]
+                if salary_row.empty:
+                    messagebox.showwarning("Warning", f"Salary data for {employee} not found. Setting salary to 0.")
+                    salary = 0
+                else:
+                    salary = salary_row['Salary'].values[0]
+
                 p_count = 0
                 r_count = 0
                 h_count = 0
                 a_count = 0
                 overtime_total = 0.0
-                salary = salary_data.loc[salary_data['Name'] == employee, 'Salary'].values[0]
 
                 for index, entry in enumerate(data[employee]):
                     date = dates[index]
@@ -123,7 +129,7 @@ class SalarySheetGenerator:
                                 overtime_total += self.calculate_overtime(hours_worked, date)
                             else:
                                 a_count += 1
-                                overtime_total += self.calculate_overtime(hours_worked, date)  
+                                overtime_total += self.calculate_overtime(hours_worked, date)
                     elif entry == "R":
                         r_count += 1
                     elif entry == "H":
@@ -132,7 +138,7 @@ class SalarySheetGenerator:
                         a_count += 1
 
                 attendance_count = p_count + r_count + (h_count / 2)
-                ote = (salary / 8.5) / month_days
+                ote = (salary / 8.5) / month_days if salary else 0
                 amount = attendance_count * ote * 8.5
                 overtime_salary = overtime_total * ote
                 total_amount = amount + overtime_salary
