@@ -31,6 +31,11 @@ class SearchApp:
         self.label_font = font.Font(family="Helvetica", size=10, weight="bold")
         self.entry_font = font.Font(family="Helvetica", size=10)
 
+        tk.Label(self.upper_frame, text="             ", bg=self.bg_color, font=self.label_font).grid(row=0, column=0, pady=2, sticky='e')
+        tk.Label(self.upper_frame, text="   ", bg=self.bg_color, font=self.label_font).grid(row=0, column=5, pady=2, sticky='e')
+        tk.Label(self.upper_frame, text="                          ", bg=self.bg_color, font=self.label_font).grid(row=0, column=8, pady=2, sticky='e')
+
+
         options = [
             ("Date:", "date_entry"),
             ("Die Code:", "die_code_entry"),
@@ -46,20 +51,20 @@ class SearchApp:
         self.entries = {}
         for idx, (label_text, entry_name) in enumerate(options):
             if label_text in ["Date:", "Die Code:"]:
-                column = 0 if label_text == "Date:" else 2
+                column = 1 if label_text == "Date:" else 3
                 self.entries[entry_name] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled')
                 tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=0, column=column, pady=2, sticky='e')
                 self.entries[entry_name].grid(row=0, column=column + 1, padx=5, pady=5, sticky='we')
             elif label_text == "Box Size:":
-                tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=4, column=0, pady=2, sticky='e')  
+                tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=1, column=1, pady=2, sticky='e')  
                 self.entries[entry_name[0]] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled')
                 self.entries[entry_name[1]] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled')
                 self.entries[entry_name[2]] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled')
-                self.entries[entry_name[0]].grid(row=4, column=1, padx=5, pady=5, sticky='we')
-                self.entries[entry_name[1]].grid(row=4, column=2, padx=5, pady=5, sticky='we')
-                self.entries[entry_name[2]].grid(row=4, column=3, padx=5, pady=5, sticky='we')
+                self.entries[entry_name[0]].grid(row=1, column=2, padx=5, pady=5, sticky='we')
+                self.entries[entry_name[1]].grid(row=1, column=3, padx=5, pady=5, sticky='we')
+                self.entries[entry_name[2]].grid(row=1, column=4, padx=5, pady=5, sticky='we')
             elif label_text in ["Sheet Size:", "UPS:"]:
-                column = 0 if label_text == "Sheet Size:" else 2
+                column = 1 if label_text == "Sheet Size:" else 3
                 self.entries[entry_name] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled', width=25)
                 tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=5, column=column, pady=2, sticky='e') 
                 self.entries[entry_name].grid(row=5, column=column + 1, padx=5, pady=5, sticky='we')
@@ -68,14 +73,24 @@ class SearchApp:
                     self.pasting_var = tk.StringVar(self.upper_frame)
                     self.pasting_var.set("Select ID")  # Default value
                     self.pasting_dropdown = tk.OptionMenu(self.upper_frame, self.pasting_var, "Top Opening Lock Pasting", "Top Opening Inter Lock", "2 Side Opening Reverse Track")
-                    self.pasting_dropdown.config(font=self.entry_font, state='disabled')
-                    tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=6, column=0, pady=2, sticky='e')  
-                    self.pasting_dropdown.grid(row=6, column=1, padx=5, pady=5, sticky='we')
+                    self.pasting_dropdown.config(font=self.entry_font, state='disabled',width=24)
+                    tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=6, column=1, pady=2, sticky='e')  
+                    self.pasting_dropdown.grid(row=6, column=2, padx=5, pady=5, sticky='we')
                 else:
-                    column = 2  
+                    column = 3  
                     self.entries[entry_name] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled', width=25)
                     tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=6, column=column, pady=2, sticky='e')  
                     self.entries[entry_name].grid(row=6, column=column + 1, padx=5, pady=5, sticky='we')
+            elif label_text == "Party:":
+                column = 6
+                self.entries[entry_name] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled', width=45)  # Twice as wide
+                tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=0, column=column, pady=2, sticky='e')
+                self.entries[entry_name].grid(row=0, column=column + 1, padx=5, pady=5, sticky='we')
+            elif label_text == "Job Name:":
+                column = 6
+                self.entries[entry_name] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled', width=45)  
+                tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=1, column=column, pady=2, sticky='e')
+                self.entries[entry_name].grid(row=1, column=column + 1, padx=5, pady=5, sticky='we')
             else:
                 self.entries[entry_name] = tk.Entry(self.upper_frame, font=self.entry_font, state='disabled')
                 tk.Label(self.upper_frame, text=label_text, bg=self.bg_color, font=self.label_font).grid(row=idx, column=0, pady=2, sticky='e')
@@ -84,37 +99,27 @@ class SearchApp:
         self.separator = ttk.Separator(self.upper_frame, orient='horizontal')
         self.separator.grid(row=len(options)+1, column=0, columnspan=13, sticky='ew', pady=10)
 
-        self.save_button = tk.Button(self.upper_frame, text="Save", command=self.save_data, state='disabled', font=self.label_font, bg="#C4BAE4")
-        self.save_button.grid(row=6, column=4, padx=15, pady=1, sticky='e')  # Adjust row as per your layout
+        self.save_button = tk.Button(self.upper_frame, text="Save", command=self.save_data, state='disabled', padx=5, font=self.label_font, bg="#C4BAE4")
+        self.save_button.grid(row=6, column=6, padx=15, pady=1, sticky='e')  # Adjust row as per your layout
 
-        tk.Label(self.upper_frame, text="Search", bg=self.bg_color, font=self.label_font).grid(row=len(options)+2, column=0)
+        tk.Label(self.upper_frame, text="Search", bg=self.bg_color, font=self.label_font).grid(row=len(options)+2, column=1)
         self.l_entry = tk.Entry(self.upper_frame, font=self.entry_font)
         self.w_entry = tk.Entry(self.upper_frame, font=self.entry_font)
         self.h_entry = tk.Entry(self.upper_frame, font=self.entry_font)
 
-        self.l_entry.grid(row=len(options)+2, column=1, padx=5)
-        self.w_entry.grid(row=len(options)+2, column=2, padx=5)
-        self.h_entry.grid(row=len(options)+2, column=3, padx=5)
+        self.l_entry.grid(row=len(options)+2, column=2, padx=5)
+        self.w_entry.grid(row=len(options)+2, column=3, padx=5)
+        self.h_entry.grid(row=len(options)+2, column=4, padx=5)
 
-        tk.Label(self.upper_frame, text="L", bg=self.bg_color, font=self.label_font).grid(row=len(options)+3, column=1)
-        tk.Label(self.upper_frame, text="W", bg=self.bg_color, font=self.label_font).grid(row=len(options)+3, column=2)
-        tk.Label(self.upper_frame, text="H", bg=self.bg_color, font=self.label_font).grid(row=len(options)+3, column=3)
+        tk.Label(self.upper_frame, text="L", bg=self.bg_color, font=self.label_font).grid(row=len(options)+3, column=2)
+        tk.Label(self.upper_frame, text="W", bg=self.bg_color, font=self.label_font).grid(row=len(options)+3, column=3)
+        tk.Label(self.upper_frame, text="H", bg=self.bg_color, font=self.label_font).grid(row=len(options)+3, column=4)
 
-        self.search_button = tk.Button(self.upper_frame, text="Search", command=self.search_data, font=self.label_font, bg="#C4BAE4")
-        self.search_button.grid(row=len(options)+2, column=4, padx=10)
+        self.search_button = tk.Button(self.upper_frame, text="Search", command=self.search_data, padx=7, font=self.label_font, bg="#C4BAE4")
+        self.search_button.grid(row=len(options)+2, column=6, padx=10)
 
-        self.update_button = tk.Button(self.upper_frame, text="Update", command=self.update_data, state='disabled', font=self.label_font, bg="#C4BAE4")
-        self.update_button.grid(row=6, column=5, padx=15, pady=1, sticky='w')
-
-        self.ordered_by_label = tk.Label(self.upper_frame, text="Ordered by:", bg=self.bg_color, font=self.label_font)
-        self.ordered_by_label.grid(row=len(options)+3, column=7, padx=5)
-
-        self.ordered_by_var = tk.StringVar()
-        self.ordered_by_dropdown = ttk.Combobox(self.upper_frame, textvariable=self.ordered_by_var, state='readonly')
-        self.ordered_by_dropdown.grid(row=len(options)+3, column=8, padx=5)
-
-        self.order_button = tk.Button(self.upper_frame, text="Order", command=self.order_data, font=self.label_font, bg="#C4BAE4")
-        self.order_button.grid(row=len(options)+3, column=9, padx=5)
+        self.update_button = tk.Button(self.upper_frame, text="Update", command=self.update_data,padx=5, state='disabled', font=self.label_font, bg="#C4BAE4")
+        self.update_button.grid(row=6, column=7, padx=15, pady=1, sticky='w')
 
         self.clear_button = tk.Button(root, text="Clear", command=self.clear_text, font=self.label_font, bg="#C4BAE4")
         self.clear_button.pack(side=tk.TOP, fill=tk.X, padx=10, ipady=0)
@@ -144,7 +149,6 @@ class SearchApp:
     def load_data(self):
         self.df = pd.read_csv("SampleData.csv")
         self.update_treeview(self.df)
-        self.ordered_by_dropdown['values'] = list(self.df.columns)
 
     def clear_text(self):
         for entry_name, entry in self.entries.items():
@@ -404,12 +408,6 @@ class SearchApp:
 
     def clear_message(self):
         self.message_label.config(text="")
-
-    def order_data(self):
-        column = self.ordered_by_var.get()
-        if column:
-            ordered_df = self.df.sort_values(by=[column])
-            self.update_treeview(ordered_df)
 
 def main():
     root = tk.Tk()
