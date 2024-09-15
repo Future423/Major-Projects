@@ -13,3 +13,33 @@
 ---
 
 **Tic Tac Toe** provides a fun and challenging single-player experience where you test your skills against an AI-like opponent. Winning may not be easy, but it's definitely possible with the right strategy!
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/5f95079f-3bff-46a7-b33a-3edfc5f13c33" alt="2 Play Board Screen" />
+</div>
+
+---
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/8e1b02a9-f375-4c0b-9212-576b8eb55414" alt="4 match tie" />
+</div>
+
+---
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/4e40860d-ace8-471d-8ee2-8052b3e9e6c7" alt="1 Start Screen" />
+</div>
+
+---
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/161767e3-8dce-4277-85f1-858fb4a8a10c" alt="5 am lost" />
+</div>
+
+---
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/5dfd105a-1755-4d1b-a612-d89a65d9be3f" alt="3 first move" />
+</div>
+
+---
