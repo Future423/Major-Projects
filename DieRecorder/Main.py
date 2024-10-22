@@ -267,13 +267,13 @@ class SearchApp:
         if confirm:
             selected_tuple = tuple(values)
             
-            with open("Die_Record.csv", "r", newline='') as file:
+            with open("SampleData.csv", "r", newline='') as file:
                 reader = csv.reader(file)
                 rows = list(reader)
             
             rows = [row for row in rows if tuple(row) != selected_tuple]
             
-            with open("Die_Record.csv", "w", newline='') as file:
+            with open("SampleData.csv", "w", newline='') as file:
                 writer = csv.writer(file)
                 writer.writerows(rows)
 
@@ -387,7 +387,7 @@ class SearchApp:
         }
 
         self.df = pd.concat([self.df, pd.DataFrame([new_data])], ignore_index=True)
-        self.df.to_csv("Die_Record.csv", index=False)
+        self.df.to_csv("SampleData.csv", index=False)
         self.update_treeview(self.df)
 
         for entry in self.entries.values():
