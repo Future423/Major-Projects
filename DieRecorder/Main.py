@@ -254,7 +254,7 @@ class SearchApp:
         for col_name, value in updated_data.items():
             self.df.at[self.current_record_index, col_name] = value
 
-        self.df.to_csv("Die_Record.csv", index=False)
+        self.df.to_csv("SampleData.csv", index=False)
         self.clear_text()
         self.update_treeview(self.df)
 
