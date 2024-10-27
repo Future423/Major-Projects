@@ -28,7 +28,7 @@ def update_employee_name_combobox():
         employee_name_combobox['values'] = []
 
 def fetch_month_files():
-    directory_path = "Attandence" #replace it with your path
+    directory_path = "Attendence" #replace it with your path
     try:
         files = os.listdir(directory_path)
         month_files = [file for file in files if file.endswith('.csv') and file != 'Salary.csv']
