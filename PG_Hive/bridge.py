@@ -3,6 +3,7 @@ import otp
 import mysql.connector
 
 global db_config
+
 db_config = {
     "host": "sql12.freesqldatabase.com",  
     "user": "Enter your user",  
@@ -10,6 +11,8 @@ db_config = {
     "database": "Enter your database",  
     "port": 3306  
 } 
+#access "https://github.com/Future423/Major-Projects/blob/main/PG_Hive/user_password_database.md" for knowing
+#How to Get `user`, `password`, and `database` from freesqldatabase.com
 
 # === OTP-related bridges ===
 def send_otp_bridge(user_email):
