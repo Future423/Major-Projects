@@ -778,7 +778,7 @@ class PGFinderApp:
                 f"Rent: {row[6]}, Locality: {row[4]}, Market: {row[5]}, "
                 f"Rooms: {row[3]}, AC/Cooler: {row[7]}, Furniture: {row[8]}, "
                 f"Category: {row[9]}, Floor: {row[10]}, Timing: {row[11]}, "
-                f"Duration: {row[12]}, Contact: {row[1483]}"
+                f"Duration: {row[12]}, Contact: {row[14]}"
             )
             self.desc_label.config(text=f"➤ {description}")
 
